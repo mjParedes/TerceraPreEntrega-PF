@@ -1,6 +1,6 @@
 import { Router } from "express";
-import CartManager  from '../dao/mongoManagers/CartManager.js'
-import {cartModel}  from "../dao/models/carts.model.js";
+import CartManager  from '../persistencia/DAOs/mongoManagers/CartManager.js'
+import {cartModel}  from "../persistencia/DAOs/models/carts.model.js";
 
 const cartManager = new CartManager()
 
@@ -65,6 +65,8 @@ router.delete('/:cid', async(req,res)=>{
     cart.save()
     res.json({message: 'Productos eliminados',cart})
 })
+
+router.post('/:cid/purchase', async(req,res)=>{})
 
 
 export default router

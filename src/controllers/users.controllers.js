@@ -1,4 +1,4 @@
-import { getAll, createUser } from '../services/users.service.js'
+import { getAll, createUser, updateUser, deleteUser } from '../services/users.service.js'
 
 export async function getAllUsers(req, res) {
     try {
@@ -14,8 +14,8 @@ export async function getAllUsers(req, res) {
 }
 
 export async function createNewUser(req, res) {
-    const { firstName, lastName, email, password } = req.body
-    if (!firstName || !lastName || !email || !password) {
+    const { first_name, last_name, email, password, age } = req.body
+    if (!first_name || !last_name || !email || !password || !age) {
       res.status(400).json({ error: 'Data missing' })
     }
     try {

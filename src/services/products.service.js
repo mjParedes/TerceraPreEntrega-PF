@@ -1,4 +1,4 @@
-import ProductManager from '../dao/mongoManagers/ProductManager.js'
+import ProductManager from '../persistencia/DAOs/mongoManagers/ProductManager.js'
 
 
 const productManager = new ProductManager()

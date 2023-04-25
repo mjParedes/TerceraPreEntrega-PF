@@ -1,4 +1,4 @@
-import CartManager from '../dao/mongoManagers/CartManager.js'
+import CartManager from '../persistencia/DAOs/mongoManagers/CartManager.js'
 
 const cartManager = new CartManager()
 

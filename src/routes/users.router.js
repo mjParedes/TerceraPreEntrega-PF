@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { productsModel } from "../dao/models/products.model.js";
-import { usersModel } from '../dao/models/users.model.js'
+import { productsModel } from "../persistencia/DAOs/models/products.model.js";
+import { usersModel } from '../persistencia/DAOs/models/users.model.js'
+import { getAllUsers, createNewUser } from "../controllers/users.controllers.js";
 import '../passport/passportStrategies.js'
 import passport from "passport";
 import { hashPassword, comparePasswords } from "../utils.js";
@@ -12,6 +13,11 @@ router.get('/products', async (req, res) => {
     const products = await productsModel.find()
     res.render('products', products)
 })
+
+router.get('/', getAllUsers)
+
+router.post('/create', createNewUser)
+
 
 //? Mongo
 // ? Registro sin passport

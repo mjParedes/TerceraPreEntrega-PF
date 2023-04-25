@@ -1,6 +1,6 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import { usersModel } from "../dao/models/users.model.js";
+import { usersModel } from "../persistencia/DAOs/models/users.model.js";
 import { hashPassword } from "../utils.js"
 import { Strategy as GitHubStrategy } from 'passport-github2'
 import cookieParser from "cookie-parser";

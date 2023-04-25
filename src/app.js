@@ -1,21 +1,24 @@
 //? Dependecias
 import express from 'express';
-// import { Server } from 'socket.io';
+import { Server } from 'socket.io';
 import handlebars from 'express-handlebars';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
+import cors from 'cors'
 // import FileStore from 'session-file-store';
 import MongoStore from 'connect-mongo'
 //? Passport
 import passport from 'passport';
 //? Customize 
 import { __dirname } from './utils.js';
-import './dao/dbConfig.js'
+import './persistencia/DAOs/dbConfig.js'
+//? Routes
 import productsRouter from './routes/products.router.js'
 import cartsRouter from './routes/carts.router.js'
 import chatsRouter from './routes/chats.router.js'
 import viewsRouter from './routes/views.router.js'
 import usersRouter from './routes/users.router.js'
+import messagesRouter from './routes/messages.router.js'
 import './passport/passportStrategies.js'
 import config from './config.js'
 
@@ -27,6 +30,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(__dirname + '/public'))
 app.use(cookieParser())
+app.use(cors())
 
 
 //? Handlebars
@@ -60,6 +64,7 @@ app.use('/api/carts', cartsRouter)
 app.use('/api/chats', chatsRouter)
 app.use('/api/views', viewsRouter)
 app.use('/api/users', usersRouter)
+app.use('/api/messages', messagesRouter)
 
 
 //? Ruta raiz
@@ -68,48 +73,56 @@ app.get('/', (req, res) => {
 })
 
 
+//? Rutas inexistentes
+app.all("*", (req, res) => {
+    // res.status(404).json({"error": "ruta no existente"})
+    res.send(`<h2>Pagina no encontrada</h2> <button onclick="location.href='/api/views/login'">Ir a login</button>`)
+  });
+
+
+
 const PORT = config.port
 
-app.listen(PORT, () => {
-    console.log(`Escuchando puerto ${PORT} => http://localhost:8080`)
-})
+// app.listen(PORT, () => {
+//     console.log(`Escuchando puerto ${PORT} => http://localhost:8080`)
+// })
 
 
 //? Sockets
-// const mensajes = []
+const mensajes = []
 
-// const httpServer = app.listen(PORT, () => {
-//     console.log(`Escuchando al puerto ${PORT} => http://localhost:8080`)
-// })
+const httpServer = app.listen(PORT, () => {
+    console.log(`Escuchando al puerto ${PORT} => http://localhost:8080`)
+})
 
-// const socketServer = new Server(httpServer)
+const socketServer = new Server(httpServer)
 
-// socketServer.on('connection', (socket) => {
-//     console.log(`Usuario conectado: ${socket.id}`)
+socketServer.on('connection', (socket) => {
+    console.log(`Usuario conectado: ${socket.id}`)
 
-//     socket.on('disconnect', () => {
-//         console.log('Usuario desconectado')
-//     })
+    socket.on('disconnect', () => {
+        console.log('Usuario desconectado')
+    })
 
-//     socket.on('mensaje', info => {
-//         mensajes.push(info)
-//         socketServer.emit('chat', mensajes)
-//         async function addMsg() {
-//             try {
-//                 const newMsg = await messagesModel.create(info)
-//                 return newMsg
-//             } catch (error) {
-//                 console.log(error)
-//             }
-//         }
-//         addMsg()
-//         console.log(info)
-//     })
+    socket.on('mensaje', info => {
+        mensajes.push(info)
+        socketServer.emit('chat', mensajes)
+        async function addMsg() {
+            try {
+                const newMsg = await messagesModel.create(info)
+                return newMsg
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        addMsg()
+        console.log(info)
+    })
 
-//     socket.on('nuevoUsuario', usuario => {
-//         socket.broadcast.emit('broadcast', usuario)
-//     })
-// })
+    socket.on('nuevoUsuario', usuario => {
+        socket.broadcast.emit('broadcast', usuario)
+    })
+})
 
 
 
