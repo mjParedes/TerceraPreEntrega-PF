@@ -43,7 +43,7 @@ router.get('/sms', async (req, res) => {
     const smsOptions = {
         body: 'Probando twilio',
         from: config.twilio_phone_number,
-        to: '+5491168830014'
+        to: '+54 11 6883 0014'
     }
     try {
         await client.messages.create(smsOptions)

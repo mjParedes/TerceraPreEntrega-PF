@@ -11,10 +11,19 @@ export async function getCarts() {
     }
 }
 
-export async function addCart(objCart) {
+export async function addCart(obj) {
     try {
-        const newCart = await cartManager.addCart(objCart)
+        const newCart = await cartManager.addCart(obj)
         return newCart
+    } catch (error) {
+        return error
+    }
+}
+
+export async function getCartByID(id) {
+    try {
+        const cart = await cartManager.getCartById(id)
+        return cart
     } catch (error) {
         return error
     }

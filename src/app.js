@@ -74,10 +74,10 @@ app.get('/', (req, res) => {
 
 
 //? Rutas inexistentes
-app.all("*", (req, res) => {
-    // res.status(404).json({"error": "ruta no existente"})
-    res.send(`<h2>Pagina no encontrada</h2> <button onclick="location.href='/api/views/login'">Ir a login</button>`)
-  });
+// app.all("*", (req, res) => {
+//     // res.status(404).json({"error": "ruta no existente"})
+//     res.send(`<h2>Pagina no encontrada</h2> <button onclick="location.href='/api/views/login'">Ir a login</button>`)
+//   });
 
 
 

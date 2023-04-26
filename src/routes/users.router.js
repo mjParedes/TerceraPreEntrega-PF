@@ -14,6 +14,8 @@ router.get('/products', async (req, res) => {
     res.render('products', products)
 })
 
+router.get('/current',)
+
 router.get('/', getAllUsers)
 
 router.post('/create', createNewUser)
@@ -60,24 +62,24 @@ router.post('/login', async (req, res) => {
             req.session.admin = true
             req.session.logged = true
 
-            // if (email === 'adminCoder@coder.com' && password === 'adminCod3r123') {
-            //     req.session.isAdmin = true
-            // } else {
-            //     req.session.isAdmin = false
-            //     req.session.role = "usuario"
+            if (email === 'adminCoder@coder.com' && password === 'adminCod3r123') {
+                req.session.isAdmin = true
+            } else {
+                req.session.isAdmin = false
+                req.session.role = "usuario"
 
-            // }
-            return res.redirect('/views/products')
+            }
+            return res.redirect('/api/views/products')
         }
     }
-    return res.redirect('/views/errorLogin')
+    return res.redirect('/api/views/errorLogin')
 })
 
 
 router.get('/logout', (req, res) => {
     req.session.destroy((error) => {
         if (error) console.log(error)
-        else res.redirect('/views/login')
+        else res.redirect('/api/views/login')
     })
 })
 
@@ -101,7 +103,7 @@ router.put('/changePassword', async (req, res) => {
 router.get('/registroGithub', passport.authenticate('githubRegistro', { scope: ['user:email'] }))
 router.get('/github', passport.authenticate('githubRegistro', { failureRedirect: '/views/errorRegistro' }), async (req, res) => {
     req.session.email = req.user.email
-    res.redirect('/views/products')
+    res.redirect('/api/views/products')
 })
 
 export default router

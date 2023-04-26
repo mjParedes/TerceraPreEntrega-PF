@@ -1,7 +1,7 @@
 import { ticketModel } from "../models/ticket.model.js";
 
 export default class TicketManager {
-    async getTickets() {
+    async getAll() {
         try {
             const tickets = await ticketModel.find()
             return tickets
@@ -9,9 +9,9 @@ export default class TicketManager {
             console.log(error)
         }
     }
-    async addTicket(objTicket) {
+    async create(obj) {
         try {
-            const newTicket = await ticketModel.create(objTicket)
+            const newTicket = await ticketModel.create(obj)
             return newTicket
         } catch (error) {
             console.log(error)

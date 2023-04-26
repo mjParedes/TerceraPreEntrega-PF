@@ -6,7 +6,7 @@ import { auth, isLogged } from "../middlewares/auth.middlewares.js";
 const router = Router()
 
 
-router.get('/registro', isLogged, (req, res) => {
+router.get('/registro', (req, res) => {
     res.render('registro')
 })
 
@@ -16,7 +16,7 @@ router.get('/errorRegistro', (req, res) => {
 })
 
 
-router.get('/login', isLogged, (req, res) => {
+router.get('/login', (req, res) => {
     res.render('login')
 })
 

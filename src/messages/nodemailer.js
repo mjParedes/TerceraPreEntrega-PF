@@ -7,6 +7,9 @@ export const transporter = nodemailer.createTransport({
     auth: {
         user: config.gmail_user,
         pass: config.gmail_password
+    },
+    tls: {
+        rejectUnauthorized: false
     }
 })
 

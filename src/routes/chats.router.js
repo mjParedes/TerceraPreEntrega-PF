@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { chatsModel} from '../persistencia/DAOs/models/chats.model.js'
+import { isLogged} from "../middlewares/auth.middlewares.js";
+
 
 const router = Router()
 
@@ -17,7 +19,7 @@ router.get('/showChats', async(req,res)=>{
 })
 
 
-router.post('/', async(req,res)=>{
+router.post('/', isLogged, async(req,res)=>{
     const chat= req.body
     const response = await chatsModel.create(chat)
     res.send(response)

@@ -24,6 +24,7 @@ export default class CartManager {
     }
 
     async addProductsToCart(objProd) {
+        
         try {
 
         } catch (error) {

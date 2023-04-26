@@ -8,17 +8,18 @@ export function auth(req, res, next) {
 
 export function isLogged(req, res, next) {
     if (req.session.logged) {
-        res.redirect('/views/products')
-    } else {
         next()
+    } else {
+        // res.redirect('/views/products')
+        res.json({message:'Sesion no iniciada'})
     }
 }
 
 export function isAdmin(req,res,next){
     if (req.session.isAdmin) {
-        res.redirect('/views/products')
-    } else {
         next()
+    } else {
+        res.redirect('/')
     }
 }
 
