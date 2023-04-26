@@ -23,6 +23,7 @@ export default class ProductsManager{
         try {
             if(idProd){
                 const foundProduct= await productsModel.findById(idProd)
+                console.log(foundProduct)
                 return foundProduct
             } else{
                 return 'Producto inexistente'

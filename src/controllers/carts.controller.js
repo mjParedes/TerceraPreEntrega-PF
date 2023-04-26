@@ -1,15 +1,22 @@
 import { getCarts, addCart, getCartByID } from "../services/carts.service.js";
+import ProductsManager from  '../persistencia/DAOs/mongoManagers/ProductManager.js'
+
+const productManager = new ProductsManager()
 
 export async function purchase(req, res) {
     try {
         const { cid } = req.params
-        console.log(cid)
         const cart = await getCartByID(cid)
-        console.log(cart)
         if (!cart) {
             res.json({ message: 'Carrito no encontrado' })
         }
-        const products = cart.products.map((p) => p._id)
+        // const products = await Promise.all(cart.products.map(async (p) => await productManager.getProductById(p._id)))
+        const array = []
+        for(let i =0; i < cart.products.lenght; i++){
+            array.push(await productManager.getProductById(cart.products[i]._id))
+            
+        }
+        console.log(array)
         if (!products) {
             res.json({ message: 'El carrito esta vacio' })
         } else {

@@ -24,7 +24,7 @@ export default class CartManager {
     }
 
     async addProductsToCart(objProd) {
-        
+
         try {
 
         } catch (error) {
@@ -64,7 +64,7 @@ export default class CartManager {
     async getCartById(idCart) {
         try {
             const carts = await cartModel.find()
-            const cart = await cartModel.findById(parseInt(idCart))
+            const cart = await cartModel.findById(idCart)
             return cart
         } catch (error) {
             return error
