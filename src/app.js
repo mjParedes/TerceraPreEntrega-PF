@@ -19,6 +19,7 @@ import chatsRouter from './routes/chats.router.js'
 import viewsRouter from './routes/views.router.js'
 import usersRouter from './routes/users.router.js'
 import messagesRouter from './routes/messages.router.js'
+import mockingRouter from './routes/mocking.router.js'
 import './passport/passportStrategies.js'
 import config from './config.js'
 
@@ -65,6 +66,8 @@ app.use('/api/chats', chatsRouter)
 app.use('/api/views', viewsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/messages', messagesRouter)
+// Mocking route
+app.use('/mockingProducts', mockingRouter)
 
 
 //? Ruta raiz

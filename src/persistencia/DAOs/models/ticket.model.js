@@ -1,6 +1,6 @@
-import { Schema, model } from "mongoose";
+import mongoose from "mongoose";
 
-const ticketSchema = new Schema({
+const ticketSchema = new mongoose.Schema({
     code: {
         type: String,
         required: true,
@@ -8,17 +8,17 @@ const ticketSchema = new Schema({
     },
     purchase_datetime: {
         type: Date,
-        default: Date.now
+        require: true
     },
     amount: {
         type: Number,
         required: true
     },
     purchaser: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Users'
     }
 })
 
-export const ticketModel = model('Ticket', ticketSchema)
+export const ticketModel = mongoose.model('Ticket', ticketSchema)
 

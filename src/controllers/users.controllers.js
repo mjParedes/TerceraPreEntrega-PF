@@ -1,4 +1,4 @@
-import { getAll, createUser, updateUser, deleteUser } from '../services/users.service.js'
+import { getAll, createUser, updateUser, deleteUser, getUser } from '../services/users.service.js'
 
 export async function getAllUsers(req, res) {
     try {
@@ -25,3 +25,13 @@ export async function createNewUser(req, res) {
       res.status(500).json({ error })
     }
   }
+
+export async function getOneUser (req,res){
+  const uID = req.session.email
+  try {
+    const user = await getUser(uID)
+    res.json({user})
+  } catch (error) {
+    res.status(500).json({error})
+  }
+}

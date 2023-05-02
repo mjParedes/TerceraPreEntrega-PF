@@ -4,6 +4,7 @@ import { cartModel } from "../persistencia/DAOs/models/carts.model.js";
 import { isLogged } from "../middlewares/auth.middlewares.js";
 import { purchase } from "../controllers/carts.controller.js";
 import { getCartByID } from "../services/carts.service.js";
+// import {getTickets,getTicketById, createTicket, resolveTicket} from '../controllers/tickets.controller.js'
 
 const cartManager = new CartManager()
 

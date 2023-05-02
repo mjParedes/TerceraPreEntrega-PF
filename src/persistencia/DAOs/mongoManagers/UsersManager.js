@@ -22,6 +22,17 @@ export default class UsersManager{
             console.log(error)
         }
     }
+
+    async getUserById(id){
+        try {
+            const user= await usersModel.findById(id)
+            const userDBDTO = new UsersDBDTO(user)
+            return userDBDTO
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     async updateAUser(id,objUser) {
         try {
             const updatedUser = await usersModel.findByIdAndUpdate(id,objUser)

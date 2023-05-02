@@ -1,10 +1,11 @@
 import { Router } from "express";
 import { productsModel } from "../persistencia/DAOs/models/products.model.js";
 import { usersModel } from '../persistencia/DAOs/models/users.model.js'
-import { getAllUsers, createNewUser } from "../controllers/users.controllers.js";
+import { getAllUsers, createNewUser, getOneUser } from "../controllers/users.controllers.js";
 import '../passport/passportStrategies.js'
 import passport from "passport";
 import { hashPassword, comparePasswords } from "../utils.js";
+
 
 
 const router = Router()
@@ -14,7 +15,7 @@ router.get('/products', async (req, res) => {
     res.render('products', products)
 })
 
-router.get('/current',)
+router.get('/current', getOneUser)
 
 router.get('/', getAllUsers)
 
@@ -27,13 +28,13 @@ router.post('/registro', async (req, res) => {
     const { email, password } = req.body
     const existeUsuario = await usersModel.find({ email })
     console.log(existeUsuario)
-    if (existeUsuario.length !== 0) {
-        res.redirect('/views/errorRegistro')
+    if (existeUsuario) {
+        res.redirect('/api/views/errorRegistro')
     } else {
         const hashNewPassword = await hashPassword(password)
         const newUser = { ...req.body, password: hashNewPassword }
         await usersModel.create(newUser)
-        res.redirect('/views/login')
+        res.redirect('/api/views/login')
     }
 }
 )

@@ -20,6 +20,16 @@ export async function createUser(objUser){
     }
 }
 
+export async function getUser(id){
+    try {
+        const user = await usersManager.getUserById(id)
+        return user        
+    } catch (error) {
+        return error
+    }
+
+}
+
 export async function updateUser(id,objUser){
     try {
         const newUser= await usersManager.updateAUser(id,objUser) 
