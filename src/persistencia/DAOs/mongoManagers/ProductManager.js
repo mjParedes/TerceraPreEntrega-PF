@@ -1,44 +1,60 @@
 import { productsModel } from "../models/products.model.js";
 
-export default class ProductsManager{
-    async getProducts(){
+export default class ProductsManager {
+    async getProducts(limit, page, title) {
         try {
-            const products = await productsModel.find()
+            const obj = title
+                ? { title }
+                : {}
+            const products = await productsModel.find(obj).limit(limit).skip((page - 1) * limit)
             return products
         } catch (error) {
             console.log(error)
         }
     }
 
-    async addProduct(objProduct){
+    async addProduct(objProduct) {
         try {
-            const newProd= await productsModel.create(objProduct)
+            const newProd = await productsModel.create(objProduct)
             return newProd
         } catch (error) {
             console.log(error)
         }
     }
 
-    async getProductsById(idProd){
+    async getOneProduct(idProd) {
         try {
-            if(idProd){
-                const foundProduct= await productsModel.findById(idProd)
+            if (idProd) {
+                const foundProduct = await productsModel.findById(idProd)
                 console.log(foundProduct)
                 return foundProduct
-            } else{
+            } else {
                 return 'Producto inexistente'
             }
         } catch (error) {
-            console.log(error.mesage)
+            console.log(error.message)
         }
     }
 
-    async deleteProduct(idProd){
+    async updateOneProduct(idProd, objProd) {
         try {
-            if(idProd){
-                const deleteProduct= await productsModel.deleteOne(idProd)
-                return deleteProduct.id 
-            } else{
+            if (idProd) {
+                const updProduct = await productsModel.updateOne(idProd, objProd)
+                return updProduct
+            } else {
+                return 'Producto no encontrado'
+            }
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+
+    async deleteOneProduct(idProd) {
+        try {
+            if (idProd) {
+                const deleteProduct = await productsModel.deleteOne(idProd)
+                return deleteProduct.id
+            } else {
                 return 'Producto no encontrado'
             }
         } catch (error) {

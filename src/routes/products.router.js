@@ -2,22 +2,17 @@ import { Router } from "express";
 import ProductsManager from '../persistencia/DAOs/mongoManagers/ProductManager.js'
 import { productsModel } from "../persistencia/DAOs/models/products.model.js";
 import { isAdmin } from "../middlewares/auth.middlewares.js";
+import { addAProduct, getAllProducts } from "../controllers/products.controller.js";
 
 
 const productsManager = new ProductsManager()
 
 const router = Router()
 
-router.get('/', async (req, res) => {
-    const { limit = 10, page = 1, title } = req.query
-    const productsFilter = await productsModel.paginate({ title }, { limit, page })
+router.get('/', getAllProducts)
 
-    if (!productsFilter) {
-        res.json({ status: 'Error' })
-    } else {
-        res.json({ status: 'Success', productsFilter })
-    }
-})
+router.post('/', addAProduct)
+
 
 router.get('/:pid', async (req, res) => {
     const { pid } = req.params
@@ -49,27 +44,6 @@ router.get('/aggregation', async (req, res) => {
         },
     ])
     res.json({ products })
-})
-
-router.post('/', isAdmin, async (req, res) => {
-    const { title, description, code, price, stock, category, } = req.body
-    if (!title || !description || !code || !price || !stock || !category) {
-        res.json({ message: 'Values required' })
-    } else {
-        const newProduct = productsManager.addProduct({
-            title,
-            description,
-            code,
-            price,
-            stock,
-            category
-        })
-        if (!newProduct) {
-            res.json({ message: 'Error' })
-        } else {
-            res.json({ message: 'Success', product: newProduct })
-        }
-    }
 })
 
 router.delete('/:pid', isAdmin, async (req, res) => {

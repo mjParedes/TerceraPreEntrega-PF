@@ -9,6 +9,9 @@ import cors from 'cors'
 import MongoStore from 'connect-mongo'
 //? Passport
 import passport from 'passport';
+//? Loggers
+// import logger from './utils/winston.js'
+import { generateLog } from './middlewares/winston.middleware.js';
 //? Customize 
 import { __dirname } from './utils.js';
 import './persistencia/DAOs/dbConfig.js'
@@ -20,12 +23,15 @@ import viewsRouter from './routes/views.router.js'
 import usersRouter from './routes/users.router.js'
 import messagesRouter from './routes/messages.router.js'
 import mockingRouter from './routes/mocking.router.js'
+import loggersRouter from './routes/loggers.router.js'
 import './passport/passportStrategies.js'
 import config from './config.js'
 
 
 const app = express()
 
+
+app.use(generateLog)
 //?  Seteo de aplicacion
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -66,6 +72,8 @@ app.use('/api/chats', chatsRouter)
 app.use('/api/views', viewsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/messages', messagesRouter)
+//  Logger route
+app.use('/loggerTest', loggersRouter)
 // Mocking route
 app.use('/mockingProducts', mockingRouter)
 
@@ -77,10 +85,10 @@ app.get('/', (req, res) => {
 
 
 //? Rutas inexistentes
-// app.all("*", (req, res) => {
-//     // res.status(404).json({"error": "ruta no existente"})
-//     res.send(`<h2>Pagina no encontrada</h2> <button onclick="location.href='/api/views/login'">Ir a login</button>`)
-//   });
+app.all("*", (req, res) => {
+    // res.status(404).json({"error": "ruta no existente"})
+    res.send(`<h2>Pagina no encontrada</h2> <button onclick="location.href='/api/views/login'">Ir a login</button>`)
+  });
 
 
 
