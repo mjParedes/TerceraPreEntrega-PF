@@ -76,6 +76,8 @@ app.use('/api/messages', messagesRouter)
 app.use('/loggerTest', loggersRouter)
 // Mocking route
 app.use('/mockingProducts', mockingRouter)
+// Password recovery
+// app.use('/changePassword',)
 
 
 //? Ruta raiz

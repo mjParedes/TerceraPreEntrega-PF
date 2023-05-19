@@ -40,6 +40,10 @@ router.get('/', (req, res) => {
     res.render('form')
 })
 
+router.get('/changePassword', (req,res)=>{
+    res.render('changePassword')
+})
+
 
 export default router
 

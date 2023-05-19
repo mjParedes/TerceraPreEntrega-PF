@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { productsModel } from "../persistencia/DAOs/models/products.model.js";
 import { usersModel } from '../persistencia/DAOs/models/users.model.js'
-import { getAllUsers, createNewUser, getOneUser } from "../controllers/users.controllers.js";
+import { getAllUsers, createNewUser, getOneUser, changeRole } from "../controllers/users.controllers.js";
 import '../passport/passportStrategies.js'
 import passport from "passport";
 import { hashPassword, comparePasswords } from "../utils.js";
@@ -20,6 +20,8 @@ router.get('/current', getOneUser)
 router.get('/', getAllUsers)
 
 router.post('/create', createNewUser)
+
+router.put('/premium/:uid', changeRole)
 
 
 //? Mongo

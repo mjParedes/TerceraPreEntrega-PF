@@ -1,5 +1,6 @@
 import CartManager from '../persistencia/DAOs/mongoManagers/CartManager.js'
 
+
 const cartManager = new CartManager()
 
 export async function getCarts() {
@@ -20,11 +21,32 @@ export async function addCart(obj) {
     }
 }
 
+export async function addOneProduct(cid,pid){
+    try {
+        const newProduct = await cartManager.addProductToCart(cid,pid)
+        if(newProduct){
+            return newProduct
+        } else {
+            return 'Producto no existe'
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export async function getCartByID(id) {
     try {
         // const idObject = mongoose.Types.ObjectId(id);
         const cart = await cartManager.getCartById(id)
         return cart
+    } catch (error) {
+        return error
+    }
+}
+
+export async function deleteCart(id){
+    try {
+        const cartDeleted = await cartManager.deleteCart(id)        
     } catch (error) {
         return error
     }

@@ -2,7 +2,7 @@ import { Router } from "express";
 import ProductsManager from '../persistencia/DAOs/mongoManagers/ProductManager.js'
 import { productsModel } from "../persistencia/DAOs/models/products.model.js";
 import { isAdmin } from "../middlewares/auth.middlewares.js";
-import { addAProduct, getAllProducts } from "../controllers/products.controller.js";
+import { addAProduct, getAllProducts, getOneProduct, deleteOneProduct } from "../controllers/products.controller.js";
 
 
 const productsManager = new ProductsManager()
@@ -11,22 +11,9 @@ const router = Router()
 
 router.get('/', getAllProducts)
 
-router.post('/', addAProduct)
+router.post('/',isAdmin, addAProduct)
 
-
-router.get('/:pid', async (req, res) => {
-    const { pid } = req.params
-    try {
-        const product = await productsManager.getProductsById(pid)
-        if (product) {
-            res.status(200).json({ message: 'Producto encontrado con exito', product })
-        } else {
-            res.status(400).json({ error: 'No existe producto con ese ID' })
-        }
-    } catch (error) {
-        res.send(error)
-    }
-})
+router.get('/:pid', getOneProduct)
 
 // Aggregation
 router.get('/aggregation', async (req, res) => {
@@ -46,11 +33,8 @@ router.get('/aggregation', async (req, res) => {
     res.json({ products })
 })
 
-router.delete('/:pid', isAdmin, async (req, res) => {
-    const { pid } = req.params
-    const product = await productsManager.deleteProduct(parseInt(pid))
-    res.json({ message: 'Producto eliminado con exito', product })
-})
+router.delete('/:pid', /*isAdmin,*/ deleteOneProduct)
+
 
 export default router
 

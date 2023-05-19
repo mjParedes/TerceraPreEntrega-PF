@@ -4,35 +4,34 @@ const usersSchema = new mongoose.Schema({
     full_name: {
         type: String
     },
-    first_name:{
+    first_name: {
         type: String,
         required: true,
     },
-    last_name:{
+    last_name: {
         type: String,
         required: true,
     },
-    email:{
+    email: {
         type: String,
         required: true,
         unique: true
     },
-    age:{
+    age: {
         type: Number,
-        required: false,
     },
-    password:{
+    password: {
         type: String,
         required: true,
     },
-    cart:{
-        type: mongoose.Types.ObjectId,
-        required: false,
+    cart: {
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Carts'
     },
     role: {
         type: String,
-        default:'usuario'
+        required: true,
+        default: 'User'
     }
 })
 

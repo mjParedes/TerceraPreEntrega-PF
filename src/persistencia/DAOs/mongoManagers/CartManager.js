@@ -23,10 +23,12 @@ export default class CartManager {
         }
     }
 
-    async addProductsToCart(objProd) {
-
+    async addProductToCart(cid,pid) {
         try {
-
+            const cart = await cartModel.findById(cid)
+            cart.products.create(pid)
+            cart.save()
+            return cart
         } catch (error) {
             console.log(error)
         }
@@ -37,7 +39,7 @@ export default class CartManager {
         try {
             const cart = await cartModel.findById(cid)
             const productIndex = cart.products.findIndex(product => product.product.toString() === _id)
-            if (productIndex >= 0){
+            if (productIndex >= 0) {
                 cart.products[productIndex].quantity += quantity;
                 cart.save()
                 return cart
@@ -45,7 +47,7 @@ export default class CartManager {
                 return 'Producto no encontrado'
             }
         } catch (error) {
-            console.log(error) 
+            console.log(error)
         }
     }
 
@@ -55,9 +57,9 @@ export default class CartManager {
             const productIndex = cart.products.findIndex(product => product.product.toString() === pid)
             cart.products = await cartModel.deleteOne(productIndex)
             cart.save()
-            return cart            
+            return cart
         } catch (error) {
-            console.log(error) 
+            console.log(error)
         }
     }
 
@@ -70,5 +72,16 @@ export default class CartManager {
             return error
         }
     }
+
+    async deleteCart(id) {
+        try {
+            const cart = await cartModel.findByIdAndDelete(id);
+            return cart;
+        } catch (error) {
+            console.log(error);
+        }
+    } 
+
+
 
 }

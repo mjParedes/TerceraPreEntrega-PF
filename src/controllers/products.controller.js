@@ -1,5 +1,5 @@
 import { productsModel } from "../persistencia/DAOs/models/products.model.js";
-import { getProducts, addOneProduct, getProductById, deleteProduct } from "../services/products.service.js";
+import { getProducts, addOneProduct, getProductById, deleteProductById, updateProductById } from "../services/products.service.js";
 
 
 export async function getAllProducts(req, res) {
@@ -33,3 +33,37 @@ export async function addAProduct(req, res) {
         }
     }
 }
+
+export async function getOneProduct(req, res) {
+    const { pid } = req.params
+    try {
+        const product = await getProductById(pid)
+        if (product) {
+            res.status(200).json({ message: 'Producto encontrado con exito', product })
+        } else {
+            res.status(400).json({ message: 'No existe producto con ese ID' })
+        }
+    } catch (error) {
+        res.send(error)
+    }
+}
+
+export async function deleteOneProduct(req, res) {
+    const { pid } = req.params
+    try {
+        const product = await deleteProductById(pid)
+        if (product) {
+            console.log(product)
+            res.status(200).json({ message: 'Producto eliminado con exito', product })
+        } else {
+            res.status(400).json({ message: 'No existe producto con ese ID' })
+        }
+    } catch (error) {
+        res.send(error)
+    }
+}
+
+
+
+
+

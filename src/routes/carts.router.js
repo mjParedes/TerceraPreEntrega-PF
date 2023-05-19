@@ -2,7 +2,7 @@ import { Router } from "express";
 import CartManager from '../persistencia/DAOs/mongoManagers/CartManager.js'
 import { cartModel } from "../persistencia/DAOs/models/carts.model.js";
 import { isLogged } from "../middlewares/auth.middlewares.js";
-import { purchase } from "../controllers/carts.controller.js";
+import { purchase, addProduct } from "../controllers/carts.controller.js";
 import { getCartByID } from "../services/carts.service.js";
 // import {getTickets,getTicketById, createTicket, resolveTicket} from '../controllers/tickets.controller.js'
 
@@ -41,13 +41,14 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.post('/addProducts', isLogged, async (req, res) => {
-    const { cartId, productId } = req.body
-    const cart = await cartModel.findById(cartId)
-    cart.products.push(productId)
-    cart.save()
-    res.json({ message: 'producto agregado' })
-})
+router.post('/addProducts', addProduct)
+// router.post('/addProducts', isLogged, async (req, res) => {
+//     const { cartId, productId } = req.body
+//     const cart = await cartModel.findById(cartId)
+//     cart.products.push(productId)
+//     cart.save()
+//     res.json({ message: 'producto agregado' })
+// })
 
 router.put('/:cid/products/:pid', async (req, res) => {
     const { cid, pid } = req.params

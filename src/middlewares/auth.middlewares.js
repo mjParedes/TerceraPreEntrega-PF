@@ -1,3 +1,7 @@
+import jwt from 'jsonwebtoken'
+import '../passport/passportStrategies.js'
+import config from '../config.js'
+
 export function auth(req, res, next) {
     if (req.session.logged) {
         next()
@@ -11,21 +15,83 @@ export function isLogged(req, res, next) {
         next()
     } else {
         // res.redirect('/views/products')
-        res.json({message:'Sesion no iniciada'})
+        res.json({ message: 'Sesion no iniciada' })
     }
 }
 
-export function isAdmin(req,res,next){
-    if (req.session.isAdmin) {
+export function isAdmin(req, res, next) {
+    if (req.session.role === "Admin") {
+        next()
+    }
+    if (req.session.role === "Premium") {
+        res.redirect('/premium')
+    }
+    if (req.session.role === "User") {
+        res.redirect('/products')
+    }
+}
+
+export function isPremium(req, res, next) {
+    if (req.session.role === "Premium") {
+        next()
+    }
+    if (req.session.role === "Admin") {
+        res.redirect('/admin')
+    }
+    if (req.session.role === "User") {
+        res.redirect('/products')
+    }
+}
+
+export function isAdminOrPremium(req, res, next) {
+    if (req.session.role !== "User") {
         next()
     } else {
-        res.redirect('/')
+        res.json({ message: 'Not authorized' })
     }
 }
 
-export function isUser(req,res,next) {
-
+export function isUserOrPremium(req, res, next) {
+    if (req.session.role !== "Admin") {
+        next()
+    } else {
+        res.json({ message: 'Not authorized' })
+    }
 }
+
+export function isNOTAdmin(req, res, next) {
+    if (req.session.role === "User") {
+        next()
+    } else {
+        res.redirect('/admin')
+    }
+}
+
+export function isUser(req, res, next) {
+    const token = cookies[cookies.length - 1]
+    if (token) {
+        const verify = jwt.verify(token, config.jwt_key)
+        if (verify.user[0].role === 'User') {
+            next()
+        } else {
+            res.json({ message: "You are not authorized" })
+        }
+    }
+}
+
+// export function isAdmin(req,res,next){
+//     if (req.session.isAdmin) {
+//         next()
+//     } else {
+//         res.redirect('/')
+//     }
+// }
+
+
+
+// export function isUser(req,res,next) {
+
+// }
 
 
 

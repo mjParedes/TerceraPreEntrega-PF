@@ -53,7 +53,7 @@ export default class ProductsManager {
         try {
             if (idProd) {
                 const deleteProduct = await productsModel.deleteOne(idProd)
-                return deleteProduct.id
+                return deleteProduct
             } else {
                 return 'Producto no encontrado'
             }
