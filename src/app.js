@@ -15,6 +15,9 @@ import { generateLog } from './middlewares/winston.middleware.js';
 //? Customize 
 import { __dirname } from './utils.js';
 import './persistencia/DAOs/dbConfig.js'
+//? Swagger
+import swaggerUi from 'swagger-ui-express'
+import { swaggerSetup } from './swaggerSpecs.js';
 //? Routes
 import productsRouter from './routes/products.router.js'
 import cartsRouter from './routes/carts.router.js'
@@ -31,6 +34,8 @@ import config from './config.js'
 const app = express()
 
 
+
+
 app.use(generateLog)
 //?  Seteo de aplicacion
 app.use(express.json())
@@ -38,6 +43,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static(__dirname + '/public'))
 app.use(cookieParser())
 app.use(cors())
+/
 
 
 //? Handlebars
@@ -78,6 +84,8 @@ app.use('/loggerTest', loggersRouter)
 app.use('/mockingProducts', mockingRouter)
 // Password recovery
 // app.use('/changePassword',)
+// Swagger docs endpoint
+app.use('/api/docs', swaggerUi.serve,swaggerUi.setup(swaggerSetup))
 
 
 //? Ruta raiz

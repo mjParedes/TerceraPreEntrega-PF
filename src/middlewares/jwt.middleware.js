@@ -14,3 +14,4 @@ export function jwtValidation(req, res, next){
         res.json({message: 'error'})
     }
 }
+
