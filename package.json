@@ -5,8 +5,11 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "start": "nodemon src/app.js",
     "test": "node src/test/crud.test.js",
-    "start": "nodemon src/app.js"
+    "test:carts": "mocha src/test/carts.test.js",
+    "test:products": "mocha src/test/products.test.js",
+    "test:sessions": "mocha src/test/sessions.test.js"
   },
   "keywords": [],
   "author": "",
@@ -28,12 +31,18 @@
     "nodemailer": "^6.9.1",
     "passport": "^0.6.0",
     "passport-github2": "^0.1.12",
+    "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "session-file-store": "^1.5.0",
     "socket.io": "^4.6.1",
+    "supertest": "^6.3.3",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^4.6.3",
     "twilio": "^4.10.0",
     "winston": "^3.8.2"
+  },
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0"
   }
 }

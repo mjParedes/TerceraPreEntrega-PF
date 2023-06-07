@@ -1,7 +1,7 @@
 import { Router } from "express";
 import ProductsManager from '../persistencia/DAOs/mongoManagers/ProductManager.js'
 import { productsModel } from "../persistencia/DAOs/models/products.model.js";
-import { isAdmin } from "../middlewares/auth.middlewares.js";
+import { isAdmin, isJustAdmin } from "../middlewares/auth.middlewares.js";
 import { addAProduct, getAllProducts, getOneProduct, deleteOneProduct } from "../controllers/products.controller.js";
 
 
@@ -32,6 +32,7 @@ router.get('/aggregation', async (req, res) => {
     ])
     res.json({ products })
 })
+
 
 router.delete('/:pid', /*isAdmin,*/ deleteOneProduct)
 

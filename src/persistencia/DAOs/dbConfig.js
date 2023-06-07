@@ -4,7 +4,7 @@ import config from '../../config.js'
 
 const URI_MONGO = config.uri_mongo
 
-try{
+try {
   await mongoose.connect(URI_MONGO)
   console.log('Conectando a la base de datos')
 } catch (error) {

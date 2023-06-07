@@ -12,7 +12,7 @@ import passport from 'passport';
 //? Loggers
 // import logger from './utils/winston.js'
 import { generateLog } from './middlewares/winston.middleware.js';
-//? Customize 
+//? Customize
 import { __dirname } from './utils.js';
 import './persistencia/DAOs/dbConfig.js'
 //? Swagger
@@ -25,6 +25,7 @@ import chatsRouter from './routes/chats.router.js'
 import viewsRouter from './routes/views.router.js'
 import usersRouter from './routes/users.router.js'
 import messagesRouter from './routes/messages.router.js'
+import sessionsRouter from './routes/sessions.router.js'
 import mockingRouter from './routes/mocking.router.js'
 import loggersRouter from './routes/loggers.router.js'
 import './passport/passportStrategies.js'
@@ -43,11 +44,11 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static(__dirname + '/public'))
 app.use(cookieParser())
 app.use(cors())
-/
+    /
 
 
-//? Handlebars
-app.engine('handlebars', handlebars.engine())
+    //? Handlebars
+    app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname + '/views')
 app.set('view engine', 'handlebars')
 
@@ -65,7 +66,7 @@ app.use(
     }))
 
 //? Passport setup
-// Inicializar 
+// Inicializar
 app.use(passport.initialize())
 // Passport guardara info de session
 app.use(passport.session())
@@ -78,6 +79,7 @@ app.use('/api/chats', chatsRouter)
 app.use('/api/views', viewsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/messages', messagesRouter)
+app.use('/api/sessions', sessionsRouter)
 //  Logger route
 app.use('/loggerTest', loggersRouter)
 // Mocking route
@@ -85,7 +87,7 @@ app.use('/mockingProducts', mockingRouter)
 // Password recovery
 // app.use('/changePassword',)
 // Swagger docs endpoint
-app.use('/api/docs', swaggerUi.serve,swaggerUi.setup(swaggerSetup))
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSetup))
 
 
 //? Ruta raiz
@@ -98,7 +100,7 @@ app.get('/', (req, res) => {
 app.all("*", (req, res) => {
     // res.status(404).json({"error": "ruta no existente"})
     res.send(`<h2>Pagina no encontrada</h2> <button onclick="location.href='/api/views/login'">Ir a login</button>`)
-  });
+});
 
 
 
@@ -113,7 +115,7 @@ const PORT = config.port
 const mensajes = []
 
 const httpServer = app.listen(PORT, () => {
-    console.log(`Escuchando al puerto ${PORT} => http://localhost:8080`)
+    console.log(`Escuchando al puerto ${PORT} => http://localhost:${PORT}`)
 })
 
 const socketServer = new Server(httpServer)

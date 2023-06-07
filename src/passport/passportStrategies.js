@@ -4,6 +4,8 @@ import { usersModel } from "../persistencia/DAOs/models/users.model.js";
 import { hashPassword } from "../utils.js"
 import { Strategy as GitHubStrategy } from 'passport-github2'
 import cookieParser from "cookie-parser";
+import {ExtractJwt ,Strategy as jwtStrategy} from "passport-jwt"
+
 
 
 // Passport local
@@ -39,7 +41,7 @@ passport.use(
         },
         async (accessToken, refreshToken, profile, done) => {
             console.log(profile)
-            done(null,'prueba')
+            done(null, 'prueba')
             const usuario = await usersModel.findOne({ email: profile._json.email })
             if (!usuario) {
                 const nuevoUsuario = {
@@ -56,6 +58,35 @@ passport.use(
         }
     )
 )
+
+// passport jwt
+
+passport.use('jwt', new jwtStrategy({
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: 'secretJWT'
+}, async (jwtPayload, done)=>{
+    console.log('----jwtpayload----', jwtPayload);
+    done(null, jwtPayload.user)
+}))
+
+
+export const cookieExtractor = (req) => {
+    const token = req?.cookies?.token
+    return token
+}
+
+passport.use('current', new jwtStrategy({
+    jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
+    secretOrKey: 'secretJWT'
+}, async (jwtPayload, done) => {
+    console.log('----jwtpayload----', jwtPayload);
+    if (jwtPayload.user) {
+        done(null, jwtPayload.user)
+    } else {
+        done(null, false)
+    }
+}))
+
 
 
 passport.serializeUser((usuario, done) => {

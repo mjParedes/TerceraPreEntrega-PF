@@ -30,13 +30,14 @@ router.post('/', async (req, res) => {
     if (!products) {
         res.json({ message: 'Values required' })
     } else {
-        const newCart = cartManager.addCart({
+        const newCart = await cartManager.addCart({
             products
         })
+        res.json({ message: 'carro creado exitosamente', newCart })
         if (!newCart) {
             res.json({ message: 'Error' })
         } else {
-            res.json({ message: 'Success', product: newCart })
+            res.json({ message: 'Success', newCart })
         }
     }
 })
