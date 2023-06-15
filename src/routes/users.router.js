@@ -1,15 +1,15 @@
 import { Router } from "express";
 import { productsModel } from "../persistencia/DAOs/models/products.model.js";
 import { usersModel } from '../persistencia/DAOs/models/users.model.js'
-import { getAllUsers, createNewUser, getOneUser, changeRole } from "../controllers/users.controllers.js";
+import { getAllUsers, createNewUser, getOneUser, changeRole, uploadDocs } from "../controllers/users.controllers.js";
 import '../passport/passportStrategies.js'
 import passport from "passport";
 import { hashPassword, comparePasswords } from "../utils.js";
-
+import { upload } from "../middlewares/multer.js";
 
 
 const router = Router()
-
+// GET
 router.get('/products', async (req, res) => {
     const products = await productsModel.find()
     res.render('products', products)
@@ -19,8 +19,16 @@ router.get('/current', getOneUser)
 
 router.get('/', getAllUsers)
 
+// POST
 router.post('/create', createNewUser)
 
+// router.post('/:uid/documents', upload.single('profile'), uploadDocs)
+
+const cpUpload = upload.fields([{ name: 'profile', maxCount: 1 }, { name: 'product', maxCount: 10 }, { name: 'identification', maxCount: 1 }, { name: 'address', maxCount: 1 }, { name: 'account', maxCount: 1 }])
+
+router.post('/:uid/documents', cpUpload, uploadDocs)
+
+// PUT
 router.put('/premium/:uid', changeRole)
 
 

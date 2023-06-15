@@ -40,9 +40,22 @@ router.get('/', (req, res) => {
     res.render('form')
 })
 
-router.get('/changePassword', (req,res)=>{
+router.get('/changePassword', (req, res) => {
     res.render('changePassword')
 })
+
+router.get('/uploadDocs', (req, res) => {
+    res.render('uploadDocs')
+})
+
+router.get('/filesUploaded', (req,res)=>{
+    res.render('filesUploaded')
+})
+
+router.get('/upgradeToPremium', (req, res) => {
+    res.render('upgradeToPremium')
+})
+
 
 
 export default router

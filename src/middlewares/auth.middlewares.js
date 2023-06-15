@@ -19,6 +19,14 @@ export function isLogged(req, res, next) {
     }
 }
 
+export function Logged(req, res, next){
+    if(req.session.logged){
+        next()
+    }else{
+        res.redirect('/login')
+    }
+}
+
 export async function isJustAdmin(req, res, next) {
     const token = await cookies[cookies.length - 1]
     const verify = jwt.verify(token, config.jwt_key)
