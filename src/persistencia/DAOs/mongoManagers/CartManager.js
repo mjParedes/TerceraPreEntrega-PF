@@ -1,6 +1,8 @@
 import { cartModel } from "../models/carts.model.js";
 
+
 export default class CartManager {
+
     async getCarts() {
         try {
             const carts = await cartModel.find()
@@ -10,7 +12,7 @@ export default class CartManager {
                 return carts
             }
         } catch (error) {
-            return error
+            console.log(error)
         }
     }
 
@@ -19,35 +21,61 @@ export default class CartManager {
             const newCart = await cartModel.create(objCart)
             return newCart
         } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async getCartById(cid) {
+        try {
+            const cart = await cartModel.findOne({ _id: cid })
+            if (cart) {
+                return cart
+            } else {
+                return 'Cart not found'
+            }
+        } catch (error) {
+            console.log(error)
             return error
         }
     }
 
-    async addProductToCart(cid,pid) {
+    async addProductToCart(cid, body) {
         try {
             const cart = await cartModel.findById(cid)
-            cart.products.create(pid)
-            cart.save()
-            return cart
+            const products = body.products
+            cart.products = [...cart.products, ...products]
+            await cart.save()
+            const updateCart = await cartModel.findByIdAndUpdate(cid, cart)
+            return updateCart
         } catch (error) {
-            console.log(error)
+            throw new Error(error)
         }
-
     }
 
-    async updateQuantity(cid, _id, quantity) {
+    async updateQuantity(cid, pid, quantity) {
+        try {
+            const cart = await cartModel.findById({ _id: cid })
+            const product = cart.products.find((p) => p.product.toString() === pid)
+            if (!cart) {
+                return console.log("Cart not found");
+            }
+            product.quantity = quantity;
+            cart.save();
+            return cart
+        } catch (error) {
+            console.log(error);
+            throw new Error(error);
+        }
+    }
+
+    async emptyCart(cid) {
         try {
             const cart = await cartModel.findById(cid)
-            const productIndex = cart.products.findIndex(product => product.product.toString() === _id)
-            if (productIndex >= 0) {
-                cart.products[productIndex].quantity += quantity;
-                cart.save()
-                return cart
-            } else {
-                return 'Producto no encontrado'
-            }
+            cart.products = []
+            await cart.save()
+            return cart
         } catch (error) {
-            console.log(error)
+            throw new Error(error)
         }
     }
 
@@ -63,25 +91,12 @@ export default class CartManager {
         }
     }
 
-    async getCartById(idCart) {
+    async deleteCart(cid) {
         try {
-            const carts = await cartModel.find()
-            const cart = await cartModel.findById(idCart)
-            return cart
-        } catch (error) {
-            return error
-        }
-    }
-
-    async deleteCart(id) {
-        try {
-            const cart = await cartModel.findByIdAndDelete(id);
+            const cart = await cartModel.findByIdAndDelete(cid);
             return cart;
         } catch (error) {
             console.log(error);
         }
-    } 
-
-
-
+    }
 }

@@ -2,33 +2,33 @@ import mongoose from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
 
 const productsSchema = new mongoose.Schema({
-    title:{
+    title: {
         type: String,
         required: true,
         index: true
     },
-    description:{
+    description: {
         type: String,
         required: true
     },
-    code:{
+    code: {
         type: String,
         required: true
     },
-    price:{
+    price: {
         type: Number,
         required: true
     },
-    stock:{
+    stock: {
         type: Number,
         required: true
     },
-    category:{
+    category: {
         type: String,
         required: true,
         index: true
     },
-    owner:{
+    owner: {
         type: String,
         default: 'adminCoder@coder.com'
     }

@@ -13,7 +13,7 @@ import passport from 'passport';
 // import logger from './utils/winston.js'
 import { generateLog } from './middlewares/winston.middleware.js';
 //? Customize
-import { __dirname } from './utils.js';
+import { __dirname } from './utils/utils.js';
 import './persistencia/DAOs/dbConfig.js'
 //? Swagger
 import swaggerUi from 'swagger-ui-express'
@@ -34,21 +34,17 @@ import config from './config.js'
 
 const app = express()
 
-
-
-
-app.use(generateLog)
 //?  Seteo de aplicacion
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(__dirname + '/public'))
 app.use(cookieParser())
 app.use(cors())
-    /
+app.use(generateLog)
 
 
-    //? Handlebars
-    app.engine('handlebars', handlebars.engine())
+//? Handlebars
+app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname + '/views')
 app.set('view engine', 'handlebars')
 
@@ -66,13 +62,11 @@ app.use(
     }))
 
 //? Passport setup
-// Inicializar
 app.use(passport.initialize())
-// Passport guardara info de session
 app.use(passport.session())
 
 
-//? Rutas
+//? Routes
 app.use('/api/products', productsRouter)
 app.use('/api/carts', cartsRouter)
 app.use('/api/chats', chatsRouter)
@@ -80,13 +74,9 @@ app.use('/api/views', viewsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/messages', messagesRouter)
 app.use('/api/sessions', sessionsRouter)
-//  Logger route
 app.use('/loggerTest', loggersRouter)
-// Mocking route
 app.use('/mockingProducts', mockingRouter)
-// Password recovery
 // app.use('/changePassword',)
-// Swagger docs endpoint
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSetup))
 
 
@@ -101,7 +91,6 @@ app.all("*", (req, res) => {
     // res.status(404).json({"error": "ruta no existente"})
     res.send(`<h2>Pagina no encontrada</h2> <button onclick="location.href='/api/views/login'">Ir a login</button>`)
 });
-
 
 
 const PORT = config.port

@@ -1,7 +1,7 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { usersModel } from "../persistencia/DAOs/models/users.model.js";
-import { hashPassword } from "../utils.js"
+import { hashPassword } from "../utils/utils.js"
 import { Strategy as GitHubStrategy } from 'passport-github2'
 import cookieParser from "cookie-parser";
 import {ExtractJwt ,Strategy as jwtStrategy} from "passport-jwt"

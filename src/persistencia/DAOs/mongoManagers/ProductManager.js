@@ -1,64 +1,56 @@
 import { productsModel } from "../models/products.model.js";
 
 export default class ProductsManager {
-    async getProducts(limit, page, title) {
+
+    async getProducts() {
         try {
-            const obj = title
-                ? { title }
-                : {}
-            const products = await productsModel.find(obj).limit(limit).skip((page - 1) * limit)
+            const products = await productsModel.find()
             return products
         } catch (error) {
             console.log(error)
+            throw new Error(error)
         }
     }
 
-    async addProduct(objProduct) {
+    async addProduct(objProd) {
         try {
-            const newProd = await productsModel.create(objProduct)
+            const newProd = await productsModel.create(objProd)
             return newProd
         } catch (error) {
             console.log(error)
         }
     }
 
-    async getOneProduct(idProd) {
+    async getOneProduct(pid) {
         try {
-            if (idProd) {
-                const foundProduct = await productsModel.findById(idProd)
-                console.log(foundProduct)
-                return foundProduct
-            } else {
-                return 'Producto inexistente'
-            }
+            const product = await productsModel.findById(pid)
+            return product
         } catch (error) {
             console.log(error.message)
+            throw new Error(error)
         }
     }
 
-    async updateOneProduct(idProd, objProd) {
+    async updateOneProduct(pid, prod) {
         try {
-            if (idProd) {
-                const updProduct = await productsModel.updateOne(idProd, objProd)
-                return updProduct
-            } else {
-                return 'Producto no encontrado'
-            }
+            const updateProduct = await productsModel.findByIdAndUpdate(pid, prod)
+            return updateProduct
         } catch (error) {
             console.log(error.message)
+            throw new Error(error)
         }
     }
 
-    async deleteOneProduct(idProd) {
+    async deleteOneProduct(pid) {
         try {
-            if (idProd) {
-                const deleteProduct = await productsModel.deleteOne(idProd)
-                return deleteProduct
-            } else {
-                return 'Producto no encontrado'
-            }
+            const deleteProduct = await productsModel.findByIdAndDelete(pid)
+            return deleteProduct
         } catch (error) {
-            console.log(error.message)
+            console.log(error)
+            throw new Error(error)
         }
     }
 }
+
+
+

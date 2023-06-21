@@ -4,7 +4,7 @@ import { usersModel } from '../persistencia/DAOs/models/users.model.js'
 import { getAllUsers, createNewUser, getOneUser, changeRole, uploadDocs } from "../controllers/users.controllers.js";
 import '../passport/passportStrategies.js'
 import passport from "passport";
-import { hashPassword, comparePasswords } from "../utils.js";
+import { hashPassword, comparePasswords } from "../utils/utils.js";
 import { upload } from "../middlewares/multer.js";
 
 

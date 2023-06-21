@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 
 
 const chatsSchema = new mongoose.Schema({
-    user:{
+    user: {
         type: String,
     },
-    message:{
+    message: {
         type: String,
     }
 })
 
-export  const chatsModel= mongoose.model('Chats', chatsSchema)
+export const chatsModel = mongoose.model('Chats', chatsSchema)

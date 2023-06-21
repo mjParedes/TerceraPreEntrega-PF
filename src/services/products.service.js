@@ -3,9 +3,9 @@ import ProductManager from '../persistencia/DAOs/mongoManagers/ProductManager.js
 
 const productManager = new ProductManager()
 
-export async function getProducts(limit, page, title) {
+export async function getProducts() {
     try {
-        const products = await productManager.getProducts(limit, page, title)
+        const products = await productManager.getProducts()
         return products
     } catch (error) {
         return error
@@ -21,9 +21,9 @@ export async function addOneProduct(product) {
     }
 }
 
-export async function getProductById(idProd) {
+export async function getProductById(pid) {
     try {
-        const productFound = await productManager.getOneProduct(idProd)
+        const productFound = await productManager.getOneProduct(pid)
         if (productFound) {
             return productFound
         } else {
@@ -35,23 +35,19 @@ export async function getProductById(idProd) {
 }
 
 
-export async function updateProductById(idProd, updObj) {
+export async function updateProductById(pid, prod) {
     try {
-        const updProduct = await productManager.updateOneProduct(...idProd, updObj)
-        return updProduct
+        const updateProduct = await productManager.updateOneProduct(pid, prod)
+        return updateProduct
     } catch (error) {
         return error
     }
 }
 
-export async function deleteProductById(idProd) {
+export async function deleteProductById(pid) {
     try {
-        const productDelete = await productManager.deleteOneProduct(idProd)
-        if(productDelete){
-            return productDelete.id
-        } else {
-            return 'Producto no encontrado'
-        }
+        const deletedProd = await productManager.deleteOneProduct(pid)
+        return deletedProd
     } catch (error) {
         return error
     }
