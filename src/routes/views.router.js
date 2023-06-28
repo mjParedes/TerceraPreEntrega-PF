@@ -1,9 +1,17 @@
 import { Router } from "express";
 import { productsModel } from "../persistencia/DAOs/models/products.model.js";
 import { auth, isLogged } from "../middlewares/auth.middlewares.js";
+import { getAllProducts } from "../controllers/products.controller.js";
 
 
 const router = Router()
+
+
+router.get('/',async(req,res)=>{
+    const products= await getAllProducts(req,res)
+    res.render('home',{products})
+})
+
 
 
 router.get('/registro', (req, res) => {

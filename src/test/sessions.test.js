@@ -34,6 +34,7 @@ describe('Test de endpoint de session', function () {
     it('Prueba de metodo GET en /api/sessions', async function () {
         const response = await request.get('/api/sessions/current')
         // expect(response._body).to.have.property('usuario')
+        // expect(response._body).to.have.property('user')
         expect(response.statusCode).to.be.equal(401)
     })
 

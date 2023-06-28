@@ -59,8 +59,7 @@ passport.use(
     )
 )
 
-// passport jwt
-
+// Passport jwt
 passport.use('jwt', new jwtStrategy({
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: 'secretJWT'

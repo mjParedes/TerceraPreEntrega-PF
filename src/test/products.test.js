@@ -30,10 +30,7 @@ describe('Tests de endpoints de Products', function (done) {
         const response = await request.post('/api/products').send(prod)
         console.log(response)
         expect(response.statusCode).to.be.equal(200)
-        expect(response._body.message).to.be.equal('Values required')
-        // expect(response._body).to.have.property('addNewProduct')
-        // expect(response._body.addNewProduct).to.have.property('_id')
-        done()
+        expect(response._body.message).to.be.equal('Product added successfully')
     })
 
     it('Probar metodo GET de /api/products', async function () {
@@ -41,8 +38,16 @@ describe('Tests de endpoints de Products', function (done) {
         expect(response.statusCode).to.be.equal(200)
         expect(response._body).to.be.an('array')
         expect(response._body).to.not.have.lengthOf(0)
-        done()
+    })
 
+    it('Probar metodo GET de /api/products/:pid', async function(){
+        const create = await request.post('/api/products').send(prod1)
+        const pid = create._body.addNewProduct._id
+        const proddb = await request.get(`/api/products/${pid}`)
+        console.log(proddb)
+        expect(proddb._body.product.title).to.be.equal(prod1.title)
+        expect(proddb._body.product).to.have.property('code')
+        expect(proddb._body.product).to.have.property('owner')
     })
 
     it('Probar metodo PUT de /api/products/:pid', async function () {
@@ -55,8 +60,6 @@ describe('Tests de endpoints de Products', function (done) {
         expect(response._body.message).to.be.equal('Product updated successfully')
         expect(response._body).to.have.property('updatedProd')
         expect(proddb.title).to.not.be.equal(prod.title)
-        done()
-
     })
 
     it('Probar metodo DELETE de /api/products/:pid', async function () {
@@ -67,7 +70,6 @@ describe('Tests de endpoints de Products', function (done) {
         expect(response.statusCode).to.be.equal(200)
         expect(response._body.message).to.be.equal('Product deleted successfully')
         expect(response._body).to.have.property('deleteProd')
-        done()
     })
 
 })

@@ -2,47 +2,57 @@ import UsersManager from "../persistencia/DAOs/mongoManagers/UsersManager.js";
 
 const usersManager = new UsersManager()
 
-export async function getAll(){
+export async function getAll() {
     try {
-        const users = await usersManager.getAllUsers()
-        return users        
+        const users = await usersManager.getUsers()
+        return users
     } catch (error) {
         return error
     }
 }
 
-export async function createUser(objUser){
-    try {
-        const newUser= await usersManager.createAUser(objUser) 
-        return newUser       
-    } catch (error) {
-        return error
-    }
-}
-
-export async function getUser(id){
+export async function getOneUser(id) {
     try {
         const user = await usersManager.getUserById(id)
-        return user        
+        return user
     } catch (error) {
         return error
     }
 
 }
 
-export async function updateUser(id,objUser){
+export async function addOneUser(obj) {
     try {
-        const newUser= await usersManager.updateAUser(id,objUser) 
-        return newUser       
+        const newUser = await usersManager.addUser(obj)
+        return newUser
     } catch (error) {
         return error
     }
 }
 
-export async function deleteUser(id,objUser){
+
+export async function updateOneUser(id, obj) {
     try {
-        const deletedUser = await usersManager.deleteAUser(id,objUser)
-        return deletedUser        
+        const updateUser = await usersManager.updateUser(id, obj)
+        return updateUser
+    } catch (error) {
+        return error
+    }
+}
+
+export async function deleteOneUser(id) {
+    try {
+        const deletedUser = await usersManager.deleteUser(id)
+        return deletedUser
+    } catch (error) {
+        return error
+    }
+}
+
+export async function deleteUsers() {
+    try {
+        const deletedUsers = await usersManager.deleteAll()
+        return deletedUsers
     } catch (error) {
         return error
     }
