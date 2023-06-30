@@ -24,13 +24,13 @@ router.post('/:cid/purchase', purchaseCart)
 
 // put
 
-router.put('/cid', addProductToCart)
+router.put('/:cid', addProductToCart)
 
-router.put('/cid/product/:pid', updateProductsQuantity)
+router.put('/:cid/product/:pid', updateProductsQuantity)
 
 // delete
 
-router.delete('/:cid/product/pid', deleteProdsFromCart)
+router.delete('/:cid/product/:pid', deleteProdsFromCart)
 
 router.delete('/:cid', emptyCartById)
 

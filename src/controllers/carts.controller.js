@@ -32,14 +32,15 @@ export async function addCart(req, res) {
         const quantity = await req.body
         const newCart = await addOneCart(products, quantity)
         if (!newCart) {
-            console.log('Could not add cart')
+            logger.error('Error in addCart')
+            logger.info('Could not add cart. Check it out.')
             res.json({ message: 'error' })
         } else {
-            console.log('Cart created successfully')
+            logger.info('Cart created successfully')
             res.json({ message: 'Cart created successfully', newCart })
         }
     } catch (error) {
-        console.log(error)
+        logger.fatal('Error in addCart')
         CustomError.createCustomError({
             name: ErrorsName.ADD_CART_ERROR,
             message: ErrorsMessage.ADD_CART_ERROR,
@@ -53,12 +54,15 @@ export async function getOneCart(req, res) {
         const { cid } = req.params
         const cart = await getCartByID(cid)
         if (!cart) {
+            logger.error('Cart not found')
+            logger.warning('Check cart')
             res.json({ message: 'Cart not found' })
         } else {
+            logger.info('Cart found')
             res.json({ cart })
         }
     } catch (error) {
-        console.log(error)
+        logger.fatal('Error in getOneCart')
         CustomError.createCustomError({
             name: ErrorsName.GET_CART_ID_ERROR,
             message: ErrorsMessage.GET_CART_ID_ERROR,
@@ -71,21 +75,26 @@ export async function addProductToCart(req, res) {
     try {
         const { cid } = req.params
         const products = await req.body
-        const cartdb = await getCartByID({ _id: cid })
+        const cartdb = await getCartByID(cid)
         if (!cartdb) {
+            logger.error('Cart not found')
+            logger.warning('Check cart variables')
             return res.json({ message: 'Cart not found' })
         }
         const newProd = products.products[0].product
         const quantity = products.products.quantity
         const productdb = await productsModel.findById(newProd)
         if (!productdb) {
+            logger.error('Product not found')
+            logger.warning('Check product variables')
             res.json({ message: 'Product not found' })
         }
         const token = await cookies[cookies.length - 1]
         const verify = jwt.verify(token, config.jwt_key)
         if (!verify.user[0].role === 'Premium') {
             if (productdb.owner === verify.user[0].email) {
-                console.log('Cannot add product')
+                logger.error('Cannot add product')
+                logger.warning('Cannot add to a cart a product that belongs to you')
                 res.json({ message: 'Cannot add product' })
             }
         }
@@ -93,20 +102,22 @@ export async function addProductToCart(req, res) {
         if (cartdb.products.find(
             (p) => p.product.toString() === newProd
         )) {
-            console.log('Product already in cart')
-            return res.json({ message: 'product already in the cart' })
+            logger.error('Product already in cart')
+            logger.warning('Try another product')
+            return res.json({ message: 'Product already in the cart' })
         } else {
             const cartMod = await addOneProduct(cid, products, { new: true })
             if (cartMod) {
-                console.log('Product added successfully')
+                logger.info('Product added successfully')
                 res.json({ message: 'product added successfully', newCart: cartMod })
             } else {
-                console.log('Product not added')
+                logger.error('Product not added')
+                logger.warning('Product could not be added to the cart')
                 return res.json({ message: 'Product not added' })
             }
         }
     } catch (error) {
-        console.log(error)
+        logger.fatal('Error in addProductToCart')
         CustomError.createCustomError({
             name: ErrorsName.ADD_PROD_TO_CART_ERROR,
             message: ErrorsMessage.ADD_PROD_TO_CART_ERROR,
@@ -121,23 +132,26 @@ export async function updateProductsQuantity(req, res) {
         const quantity = req.body.quantity
         const cart = await cartModel.findById({ _id: cid })
         if (!cart) {
-            console.log('Cart not found')
+            logger.error('Cart not found')
+            logger.warning('Check cart variables')
             return res.json({ message: 'Cart not found' })
         }
         const prod = await productsModel.findById({ _id: pid })
         if (!prod) {
-            console.log('Product not found')
+            logger.error('Product not found')
+            logger.warning('Check product variables')
             return res.json({ message: 'Product not found' })
         }
         const updatedCart = await updateProductQuantity(cid, pid, quantity)
         if (!updatedCart) {
-            console.log('Quantity not updated')
+            logger.error('Quantity not updated')
+            logger.warning('Quantity could not be updated in the cart')
             return res.json({ message: 'Quantity not updated' })
         }
-        console.log("Product's quantity updated")
+        logger.info("Product's quantity updated")
         res.json({ message: "product's quantity updated successfully", updatedCart })
     } catch (error) {
-        console.log('Error in updateProductsQuantity')
+        logger.fatal('Error in updateProductsQuantity')
         CustomError.createCustomError({
             name: ErrorsName.UPDATE_PRODS_QUANTITY_ERROR,
             message: ErrorsMessage.UPDATE_PRODS_QUANTITY_ERROR,
@@ -294,7 +308,7 @@ export async function deleteCart(req, res) {
             res.json({ message: 'Cart not found' })
         }
     } catch (error) {
-        logger.fatal('Error in delCart')
+        logger.fatal('Error in deleteCart')
         CustomError.createCustomError({
             name: ErrorsName.DELETE_CART_ERROR,
             message: ErrorsMessage.DELETE_CART_ERROR,

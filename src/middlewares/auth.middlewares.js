@@ -6,23 +6,26 @@ export function auth(req, res, next) {
     if (req.session.logged) {
         next()
     } else {
-        res.redirect('/')
+        res.redirect('/login')
     }
 }
 
 export function isLogged(req, res, next) {
     if (req.session.logged) {
-        next()
+        if (req.session.admin) {
+            res.redirect('/admin')
+        } else {
+            res.redirect('/products')
+        }
     } else {
-        // res.redirect('/views/products')
-        res.json({ message: 'Sesion no iniciada' })
+        next()
     }
 }
 
-export function Logged(req, res, next){
-    if(req.session.logged){
+export function Logged(req, res, next) {
+    if (req.session.logged) {
         next()
-    }else{
+    } else {
         res.redirect('/login')
     }
 }
@@ -96,20 +99,6 @@ export function isUser(req, res, next) {
         }
     }
 }
-
-// export function isAdmin(req,res,next){
-//     if (req.session.isAdmin) {
-//         next()
-//     } else {
-//         res.redirect('/')
-//     }
-// }
-
-
-
-// export function isUser(req,res,next) {
-
-// }
 
 
 

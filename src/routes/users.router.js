@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { productsModel } from "../persistencia/DAOs/models/products.model.js";
 import { usersModel } from '../persistencia/DAOs/models/users.model.js'
-import { changeRole, uploadDocs, signUpUser, loginUser, changePassword, getGithub, logout, deleteAllUsers } from "../controllers/users.controllers.js";
+import { changeRole, uploadDocs, signUpUser, loginUser, changePassword, getGithub, logout, deleteAllUsers, getAllUsers, deleteInactiveUsers } from "../controllers/users.controllers.js";
 import '../passport/passportStrategies.js'
 import passport from "passport";
 import { hashPassword, comparePasswords } from "../utils/utils.js";
@@ -30,6 +30,8 @@ router.put('/premium/:uid', changeRole)
 
 
 // GET
+router.get('/', getAllUsers)
+
 // router.get(
 //     '/loginGithub',
 //     passport.authenticate('githubRegistro', { scope: ['user:email'] })
@@ -47,7 +49,10 @@ router.get('/logout', logout)
 
 
 // DELETE
+router.delete('/', deleteInactiveUsers)
+
 router.delete('/deleteAll', deleteAllUsers)
+
 
 
 // // GET

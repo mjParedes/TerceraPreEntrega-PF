@@ -40,11 +40,10 @@ describe('Tests de endpoints de Products', function (done) {
         expect(response._body).to.not.have.lengthOf(0)
     })
 
-    it('Probar metodo GET de /api/products/:pid', async function(){
+    it('Probar metodo GET de /api/products/:pid', async function () {
         const create = await request.post('/api/products').send(prod1)
-        const pid = create._body.addNewProduct._id
+        const pid = create._body.addNewProd._id
         const proddb = await request.get(`/api/products/${pid}`)
-        console.log(proddb)
         expect(proddb._body.product.title).to.be.equal(prod1.title)
         expect(proddb._body.product).to.have.property('code')
         expect(proddb._body.product).to.have.property('owner')
@@ -52,7 +51,7 @@ describe('Tests de endpoints de Products', function (done) {
 
     it('Probar metodo PUT de /api/products/:pid', async function () {
         const create = await request.post('/api/products').send(prod)
-        const pid = create._body.addNewProduct._id
+        const pid = create._body.addNewProd._id
         const login = await request.post('/users/login').send(admin)
         const response = await request.put(`/api/products/${pid}`).send({ title: 'iphone 16' })
         const proddb = await request.get(`/api/products/${pid}`)
@@ -64,7 +63,7 @@ describe('Tests de endpoints de Products', function (done) {
 
     it('Probar metodo DELETE de /api/products/:pid', async function () {
         const create = await request.post('/api/products').send(prod)
-        const pid = create._body.addNewProduct._id
+        const pid = create._body.addNewProd._id
         const login = await request.post('/users/login').send(admin)
         const response = await request.delete(`/api/products/${pid}`)
         expect(response.statusCode).to.be.equal(200)

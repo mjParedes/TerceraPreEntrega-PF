@@ -7,8 +7,19 @@ import logger from '../utils/winston.js'
 import config from '../config.js'
 import CustomError from '../utils/errors/customError.js'
 import { ErrorsCause, ErrorsMessage, ErrorsName } from '../utils/errors/errors.enum.js'
+import { transporter } from '../messages/nodemailer.js'
 
 
+
+export async function getAllUsers(req, res) {
+  try {
+    const allUsers = await getAll()
+    res.json(allUsers)
+  } catch (error) {
+    logger.info('Cannot show users')
+  }
+
+}
 export async function signUpUser(req, res) {
   try {
     const { email, password } = req.body
@@ -418,10 +429,41 @@ export async function logout(req, res) {
   }
 }
 
+
+export async function deleteInactiveUsers(req, res) {
+  try {
+    const inactiveUsers = await usersModel.find({
+      lastConnection: { $lt: new Date(Date.now() - 30 * 60 * 1000) }, // Últimos 30 minutos
+    });
+
+    inactiveUsers.forEach(async (user) => {
+      await user.remove();
+      // Enviar correo de notificación al usuario eliminado
+      const mailOptions = {
+        from: 'MATUDEVS E-COMMERCE',
+        to: user.email,
+        subject: 'Cuenta eliminada por inactividad',
+        text: 'Tu cuenta ha sido eliminada debido a la falta de actividad en el ecommerce.',
+      };
+
+      transporter.sendMail(mailOptions, (error) => {
+        if (error) {
+          console.error('Error al enviar el correo:', error);
+        }
+      });
+    });
+    logger.info('Inactive users successfully deleted')
+    res.json({ message: 'Usuarios inactivos eliminados correctamente' });
+  } catch (error) {
+    logger.info('Error deleting inactive users')
+    res.status(500).json({ error: 'Error al eliminar los usuarios inactivos' });
+  }
+}
+
 export async function deleteAllUsers(req, res) {
   try {
     const delUsers = await deleteUsers()
-    res.json({ message: 'All users was deleted',data:delUsers })
+    res.json({ message: 'All users was deleted', data: delUsers })
   } catch (error) {
     logger.info('A error has happened')
   }

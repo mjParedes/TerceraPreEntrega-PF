@@ -32,7 +32,7 @@ paths:
     post:
       tags:
         -Products
-      summary: Add one product
+      summary: Adds one product
       description: 'If you want to add a product you have to send a petition to this endpoint and complete the required fields'
       requestBody:
         content:
@@ -49,7 +49,7 @@ paths:
               owner: "adminCoder@coder.com"
       responses:
         '200':
-          description: Product added
+          description: Adds one product
           content:
             application/json:
               schemas:
@@ -67,26 +67,26 @@ paths:
         '400':
           description: Bad request.
         '401':
-          description: Unauthorized.
+          description: Authorization information is missing or invalid.
         '404':
           description: Not Found.
         '405':
-          description: Method not allowed.
+          description: Invalid method.
         '500':
           description: Unexpected error.
   /api/products/{id}:
     get:
       tags:
         -Products
-      summary: Get one product by ID
+      summary: Returns one product by id
       description: 'If you want to get a product by id you have to send a petition to this endpoint with the required data bellow'
       parameters:
         - name: id
           in: path
-          description: Product ID
+          description: Product identifier
       responses:
         '200':
-          description: Product found
+          description: Gets the product with that id
           content:
             application/json:
               schemas:
@@ -106,13 +106,13 @@ paths:
         '404':
           description: Not Found.
         '405':
-          description: Method not allowed.
+          description: Invalid method.
         '500':
           description: Unexpected error.
     put:
       tags:
         -Products
-      summary: Update a product
+      summary: Update one product by id
       description: "If you want to update a product you have to send a petition to this endpoint with the required data bellow. In the request body just send the values you want to change"
       parameters:
         - name: id
@@ -124,7 +124,7 @@ paths:
             schema:
               $ref: "#/components/schemas/Products"
             example:
-              description: 'Consola UltraSlim 1TB' 
+              description: 'Consola UltraSlim 1TB'
       responses:
         "200":
           description: Updates a product's value
@@ -174,6 +174,7 @@ paths:
           description: Invalid Method.
         "500":
           description: Unexpected error.
+          
 components:
   schemas:
     Products:
