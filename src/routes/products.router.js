@@ -16,15 +16,15 @@ router.get('/:pid', getOneProduct)
 
 
 // post
-router.post('/', /*isAdmin*/ addAProduct)
+router.post('/', isAdmin, addAProduct)
 
 
 // put
-router.put('/:pid', /* isJustAdmin*/ updateAProduct)
+router.put('/:pid', isJustAdmin, updateAProduct)
 
 
 // delete
-router.delete('/:pid', /*isAdmin,*/ deleteOneProduct)
+router.delete('/:pid', isAdmin, deleteOneProduct)
 
 
 export default router
