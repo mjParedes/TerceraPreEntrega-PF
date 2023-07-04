@@ -8,19 +8,20 @@
 
 <button
   style="margin-left: 20px; margin-bottom: 20px"
-  onclick="location.href='/chat'"
+  onclick="location.href='/api/chats'"
 >Chat</button>
 <button
   style="margin-left: 20px; margin-bottom: 20px"
-  onclick="location.href='/uploadDocs'"
+  onclick="location.href='/api/views/uploadDocs'"
 >Upload Files</button>
 <button
   style="margin-left: 20px; margin-bottom: 20px"
-  onclick="location.href='/upgradeToPremium'"
+  onclick="location.href='/api/views/upgradeToPremium'"
 >Upgrade to Premium</button>
 <button
   style="margin-left: 20px; margin-bottom: 20px"
-  onclick="location.href='/api/views/login'"
+  {{!-- onclick="location.href='/api/views/login'" --}}
+  onclick="location.href='/api/users/logout'"
 >Logout</button>
 
 <h2 style="margin-left: 20px; margin-top: 20px">PRODUCTS</h2>

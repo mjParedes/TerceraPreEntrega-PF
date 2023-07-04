@@ -158,9 +158,17 @@ router.delete('/deleteAll', deleteAllUsers)
 
 // // LOGIN GITHUB
 router.get('/registroGithub', passport.authenticate('githubRegistro', { scope: ['user:email'] }))
-router.get('/github', passport.authenticate('githubRegistro', { failureRedirect: '/api/views/errorRegistro' }), async (req, res) => {
-    req.session.email = req.user.email
-    res.redirect('/api/views/products')
-})
+
+// router.get('/github', passport.authenticate('githubRegistro', { failureRedirect: '/api/views/errorRegistro' }), async (req, res) => {
+//     req.session.email = req.user.email
+//     res.redirect('/api/views/products')
+// })
+
+router.get(
+    "/github",
+    passport.authenticate("githubRegistro", { failureRedirect: "/api/views/errorLogin" }),
+    getGithub
+);
+
 
 export default router

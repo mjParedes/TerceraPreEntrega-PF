@@ -1,6 +1,6 @@
 import { Router } from "express";
 import ProductsManager from '../persistencia/DAOs/mongoManagers/ProductManager.js'
-import { isAdmin, isJustAdmin } from "../middlewares/auth.middlewares.js";
+import { isAdmin, isAdminOrPremium, isJustAdmin } from "../middlewares/auth.middlewares.js";
 import { addAProduct, getAllProducts, getOneProduct, deleteOneProduct, updateAProduct } from "../controllers/products.controller.js";
 
 
@@ -24,7 +24,7 @@ router.put('/:pid', isJustAdmin, updateAProduct)
 
 
 // delete
-router.delete('/:pid', isAdmin, deleteOneProduct)
+router.delete('/:pid', isAdminOrPremium, deleteOneProduct)
 
 
 export default router

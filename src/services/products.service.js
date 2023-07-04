@@ -24,11 +24,7 @@ export async function addOneProduct(product) {
 export async function getProductById(pid) {
     try {
         const productFound = await productManager.getOneProduct(pid)
-        if (productFound) {
-            return productFound
-        } else {
-            return 'Producto no encontrado'
-        }
+        return productFound
     } catch (error) {
         return error
     }

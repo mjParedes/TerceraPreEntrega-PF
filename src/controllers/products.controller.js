@@ -180,58 +180,47 @@ export async function getOneProduct(req, res) {
     }
 }
 
+
 export async function deleteOneProduct(req, res) {
     const id = req.params.pid
     try {
-        const deleteProd = await deleteProductById(id)
-        logger.info('Product deleted successfully')
-        res.json({ message: 'Product deleted successfully', deleteProd })
+        const get = await getProductById({ _id: id })
+        console.log(get)
+        const token = cookies[cookies.length - 1]
+        const verify = jwt.verify(token, config.jwt_key)
+        if (verify.user[0].role === 'Premium') {
+            if (verify.user[0].email === get.owner) {
+                const deleteProd = await deleteProductById(id)
+                if (deleteProd) {
+                    logger.info('Product deleted successfully')
+                    res.json({ message: 'Product deleted successfully', deleteProd })
+                } else {
+                    logger.error('product not found')
+                    logger.warning('Check the variables')
+                    res.json({ message: "product not found" })
+                }
+            } else {
+                logger.error('Not authorized')
+                logger.warning('You are not authorized to delete this product')
+                res.json({ message: "Not authorized" })
+            }
+        } else {
+            const deleteProd = await deleteProductById(id)
+            if (deleteProd) {
+                logger.info('Product deleted successfully')
+                res.json({ message: 'Product deleted successfully', deleteProd })
+            } else {
+                logger.error('product not found')
+                logger.warning('Check the variables')
+                res.json({ message: "product not found" })
+            }
+        }
     } catch (error) {
-        logger.fatal('Error was happened on delete a product.')
-
+        logger.fatal('Error in deleteProductById')
+        CustomError.createCustomError({
+            name: ErrorsName.DELETE_PRODUCT_ERROR,
+            message: ErrorsMessage.DELETE_PRODUCT_ERROR,
+            cause: ErrorsCause.DELETE_PRODUCT_ERROR
+        })
     }
 }
-
-// export async function deleteOneProduct(req, res) {
-//     const id = req.params.pid
-//     try {
-//         const get = await getProductById({_id: id})
-//         console.log(get)
-//         const token = cookies[cookies.length - 1]
-//         const verify = jwt.verify(token, config.jwt_key)
-//         if (verify.user[0].role === 'Premium') {
-//             if (verify.user[0].email === get.owner) {
-//                 const deleteProd = await deleteProductById(id)
-//                 if (deleteProd) {
-//                     logger.info('Product deleted successfully')
-//                     res.json({ message: 'Product deleted successfully', deleteProd })
-//                 } else {
-//                     logger.error('product not found')
-//                     logger.warning('Check the variables')
-//                     res.json({ message: "product not found" })
-//                 }
-//             } else {
-//                 logger.error('Not authorized')
-//                 logger.warning('You are not authorized to delete this product')
-//                 res.json({ message: "Not authorized" })
-//             }
-//         } else {
-//             const deleteProd = await deleteProductById(id)
-//             if (deleteProd) {
-//                 logger.info('Product deleted successfully')
-//                 res.json({ message: 'Product deleted successfully', deleteProd })
-//             } else {
-//                 logger.error('product not found')
-//                 logger.warning('Check the variables')
-//                 res.json({ message: "product not found" })
-//             }
-//         }
-//     } catch (error) {
-//         logger.fatal('Error in deleteProductById')
-//         CustomError.createCustomError({
-//             name: ErrorsName.DELETE_PRODUCT_ERROR,
-//             message: ErrorsMessage.DELETE_PRODUCT_ERROR,
-//             cause: ErrorsCause.DELETE_PRODUCT_ERROR
-//         })
-//     }
-// }

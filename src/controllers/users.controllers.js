@@ -417,7 +417,7 @@ export async function logout(req, res) {
         }
       });
     } else {
-      res.redirect("/login");
+      res.redirect("/api/views/login");
     }
   } catch (error) {
     logger.fatal('Error in logout')

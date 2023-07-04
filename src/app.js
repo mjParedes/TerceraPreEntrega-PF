@@ -10,8 +10,8 @@ import MongoStore from 'connect-mongo'
 //? Passport
 import passport from 'passport';
 //? Loggers
-// import logger from './utils/winston.js'
 import { generateLog } from './middlewares/winston.middleware.js';
+import { errorMiddleware} from './utils/errors/errors.middleware.js'
 //? Customize
 import { __dirname } from './utils/utils.js';
 import './persistencia/DAOs/dbConfig.js'
@@ -32,6 +32,7 @@ import './passport/passportStrategies.js'
 import config from './config.js'
 
 
+
 const app = express()
 
 //?  Seteo de aplicacion
@@ -40,7 +41,6 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static(__dirname + '/public'))
 app.use(cookieParser())
 app.use(cors())
-app.use(generateLog)
 
 
 //? Handlebars
@@ -79,6 +79,10 @@ app.use('/mockingProducts', mockingRouter)
 // app.use('/changePassword',)
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSetup))
 
+app.use(generateLog)
+app.use(errorMiddleware)
+
+
 
 //? Ruta raiz
 app.get('/', (req, res) => {
@@ -88,16 +92,11 @@ app.get('/', (req, res) => {
 
 //? Rutas inexistentes
 app.all("*", (req, res) => {
-    // res.status(404).json({"error": "ruta no existente"})
     res.send(`<h2>Pagina no encontrada</h2> <button onclick="location.href='/api/views/login'">Ir a login</button>`)
 });
 
 
 const PORT = config.port
-
-// app.listen(PORT, () => {
-//     console.log(`Escuchando puerto ${PORT} => http://localhost:8080`)
-// })
 
 
 //? Sockets
