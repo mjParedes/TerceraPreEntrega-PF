@@ -444,6 +444,10 @@ export async function deleteInactiveUsers(req, res) {
         to: user.email,
         subject: 'Cuenta eliminada por inactividad',
         text: 'Tu cuenta ha sido eliminada debido a la falta de actividad en el ecommerce.',
+        html: `
+        <h2>Hello ${user.first_name} ${user.last_name},</h2>
+        <h3>Your account has been deleted</h3>
+        <p>Your account was deleted due to inactivity for 2 days.</p>`
       };
 
       transporter.sendMail(mailOptions, (error) => {

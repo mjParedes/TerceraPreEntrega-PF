@@ -194,6 +194,21 @@ export async function deleteOneProduct(req, res) {
                 if (deleteProd) {
                     logger.info('Product deleted successfully')
                     res.json({ message: 'Product deleted successfully', deleteProd })
+                    const messageOptions = {
+                        from: 'MatuDevs E-commerce',
+                        to: get.owner,
+                        subject: 'Deleted product',
+                        html: `
+                        <h2>Hello ${get.owner},</h2>
+                        <h3>A product you own has been deleted</h3>
+                        `
+                    }
+                    if (!messageOptions) {
+                        logger.error('Email not sent')
+                        logger.warning('Email not sent, check the variables')
+                        res.json({ message: 'Email not sent' })
+                    }
+                    transporter.sendMail(messageOptions)
                 } else {
                     logger.error('product not found')
                     logger.warning('Check the variables')

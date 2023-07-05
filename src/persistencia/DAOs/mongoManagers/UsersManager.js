@@ -4,15 +4,6 @@ import { usersModel } from "../models/users.model.js";
 
 export default class UsersManager {
 
-    // async getUsers(email,password) {
-    //     try {
-    //         const users = await usersModel.find({email:email,password:password})
-    //         return users
-    //     } catch (error) {
-    //         return error
-    //     }
-    // }
-
     async getUsers(){
         try {
             const users = usersModel.find({},'first_name email role')
